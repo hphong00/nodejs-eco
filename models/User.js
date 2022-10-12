@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Joi = require('joi');
 
 // const roles = [
@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema(
     roles: {
       type: Array,
       // enum: roles,
-      default: "ROLE_USER",
+      default: 'ROLE_USER',
     },
     active: {
       type: Boolean,
@@ -57,30 +57,30 @@ const UserSchema = new mongoose.Schema(
     profile: {
       fullName: {
         type: String,
-        default: "",
+        default: '',
         // maxlength: 128,
         // index: true,
         // trim: true,
       },
       address: {
         type: String,
-        default: "",
+        default: '',
       },
       phone: {
         type: String,
-        default: "",
+        default: '',
       },
       sex: {
         type: String,
-        default: "",
+        default: '',
       },
       avata: {
         type: String,
-        default: "",
+        default: '',
       },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 // function validateUser(user) {
 //   const schema = {
@@ -92,5 +92,5 @@ const UserSchema = new mongoose.Schema(
 //   return Joi.validate(user, schema);
 // }
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema);
 // exports.validate = validateUser;

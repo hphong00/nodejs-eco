@@ -1,6 +1,6 @@
-const User = require("../models/User");
-const CryptoJS = require("crypto-js");
-const jwt = require("jsonwebtoken");
+const User = require('../models/User');
+const CryptoJS = require('crypto-js');
+const jwt = require('jsonwebtoken');
 const {
   PORT,
   MONGO_URL,
@@ -14,7 +14,7 @@ const {
   BASE_URL,
   JWT_EXPIRATION_MINUTES,
   UPLOAD_LIMIT,
-} = require("../config/vars");
+} = require('../config/vars');
 
 const encodedToken = (user) => {
   return jwt.sign(
@@ -23,7 +23,7 @@ const encodedToken = (user) => {
       isAdmin: user.isAdmin,
     },
     process.env.JWT_SEC,
-    { expiresIn: 60 * 60 * 24 }
+    { expiresIn: 60 * 60 * 24 },
   );
 };
 
@@ -33,7 +33,7 @@ const encodedrefreshToken = (user) => {
       id: user._id,
     },
     process.env.JWT_SEC,
-    { expiresIn: 60 * 60 * 24 }
+    { expiresIn: 60 * 60 * 24 },
   );
 };
 
@@ -66,20 +66,28 @@ const auth = {
     try {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
-        return res.status(401).json("Wrong credentials!");
+        return res.status(401).json('Wrong credentials!');
       }
       const hashedPassword = decryptPassword(user.password);
       const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
       if (OriginalPassword !== req.body.password) {
-        return res.status(401).json("Wrong credentials!");
+        return res.status(401).json('Wrong credentials!');
       }
 
       const accessToken = encodedToken(user);
       const refreshToken = encodedrefreshToken(user);
+
+      const cooki = res.cookie('jwt', refreshToken, {
+        httpOnly: true, //accessible only by web server
+        // secure: true, //https
+        sameSite: 'None', //cross-site cookie
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+      });
+
       const response = {
-        status: "successful",
+        status: 'successful',
         accessToken: accessToken,
-        refreshToken: refreshToken,
+        // refreshToken: refreshToken,
       };
       res.status(200).json(response);
     } catch (err) {
@@ -95,20 +103,20 @@ const auth = {
         const decoded = jwt.verify(refreshToken, process.env.JWT_SEC);
         const user = await User.findById(decoded.id);
         if (!user) {
-          return res.status(400).send("Invalid refreshToken");
+          return res.status(400).send('Invalid refreshToken');
         }
 
         const accessToken = encodedToken(user);
         const response = {
-          status: "refresh successful",
+          status: 'refresh successful',
           accessToken: accessToken,
         };
         return res.status(200).send(response);
       } catch (err) {
-        return res.status(401).send("Invalid refreshToken");
+        return res.status(401).send('Invalid refreshToken');
       }
     } else {
-      res.status(404).send("Invalid refreshToken");
+      res.status(404).send('Invalid refreshToken');
     }
   },
 
@@ -119,7 +127,7 @@ const auth = {
       if (user) {
         const accessToken = encodedToken(user);
         res
-          .cookie("accessToken", accessToken, {
+          .cookie('accessToken', accessToken, {
             httpOnly: true,
           })
           .status(200)
@@ -132,7 +140,7 @@ const auth = {
         const savedUser = await newUser.save();
         const accessToken = encodedToken(user);
         res
-          .cookie("accessToken", accessToken, {
+          .cookie('accessToken', accessToken, {
             httpOnly: true,
           })
           .status(200)
@@ -142,7 +150,14 @@ const auth = {
       next(err);
     }
   },
-};
 
+  // LOGOUT
+  logout: async (req, res) => {
+    const cookies = req.cookies;
+    if (!cookies?.jwt) return res.sendStatus(204); //No content
+    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
+    res.json({ message: 'Cookie cleared' });
+  },
+};
 
 module.exports = auth;

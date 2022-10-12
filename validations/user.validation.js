@@ -1,6 +1,6 @@
 export {};
-import * as Joi from "joi";
-import { User } from "../../api/models";
+import * as Joi from 'joi';
+import { User } from '../../api/models';
 
 const requireEmail = () => Joi.string().email().required();
 

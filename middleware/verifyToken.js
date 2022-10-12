@@ -1,27 +1,27 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 // xác thực token
 const verifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.token;
-    if (authHeader && authHeader.startsWith("Bearer")) {
-      const token = authHeader.split(" ")[1];
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      const token = authHeader.split(' ')[1];
       if (!token) {
-        return res.status(400).json("You are not authenticated!");
+        return res.status(400).json('You are not authenticated!');
       }
       const decoded = jwt.verify(token, process.env.JWT_SEC);
       const user = await User.findById(decoded.id);
       if (!user) {
-        return res.status(401).json("You are not authenticated!");
+        return res.status(401).json('You are not authenticated!');
       }
       req.user = user;
       next();
     } else {
-      return res.status(402).json("You are not authenticated!");
+      return res.status(402).json('You are not authenticated!');
     }
   } catch {
-    return res.status(403).json("You are not authenticated!");
+    return res.status(403).json('You are not authenticated!');
   }
 };
 
@@ -39,14 +39,14 @@ const verifyTokenAndAuthorization = (req, res, next) => {
         if (check) {
           next();
         } else {
-          res.status(403).json("You are not alowed to do that!");
+          res.status(403).json('You are not alowed to do that!');
         }
       } else {
-        res.status(403).json("You are not alowed to do that!");
+        res.status(403).json('You are not alowed to do that!');
       }
     });
   } catch {
-    return res.status(401).json("You are not alowed to do that!");
+    return res.status(401).json('You are not alowed to do that!');
   }
 };
 
@@ -64,14 +64,14 @@ const verifyTokenAndAdmin = (req, res, next) => {
         if (check) {
           next();
         } else {
-          res.status(403).json("You are not alowed to do that!");
+          res.status(403).json('You are not alowed to do that!');
         }
       } else {
-        res.status(403).json("You are not alowed to do that!");
+        res.status(403).json('You are not alowed to do that!');
       }
     });
   } catch {
-    return res.status(401).json("You are not alowed to do that!");
+    return res.status(401).json('You are not alowed to do that!');
   }
 };
 
@@ -89,14 +89,14 @@ const verifyTokenJe = (req, res, next) => {
         if (check) {
           next();
         } else {
-          res.status(403).json("You are not alowed to do that!");
+          res.status(403).json('You are not alowed to do that!');
         }
       } else {
-        res.status(403).json("You are not alowed to do that!");
+        res.status(403).json('You are not alowed to do that!');
       }
     });
   } catch {
-    return res.status(401).json("You are not alowed to do that!");
+    return res.status(401).json('You are not alowed to do that!');
   }
 };
 
@@ -114,14 +114,14 @@ const verifyTokenAnonymous = (req, res, next) => {
         if (check) {
           next();
         } else {
-          res.status(403).json("You are not alowed to do that!");
+          res.status(403).json('You are not alowed to do that!');
         }
       } else {
-        res.status(403).json("You are not alowed to do that!");
+        res.status(403).json('You are not alowed to do that!');
       }
     });
   } catch {
-    return res.status(401).json("You are not alowed to do that!");
+    return res.status(401).json('You are not alowed to do that!');
   }
 };
 
@@ -139,14 +139,14 @@ const verifyTokeSuperAdmin = (req, res, next) => {
         if (check) {
           next();
         } else {
-          res.status(403).json("You are not alowed to do that!");
+          res.status(403).json('You are not alowed to do that!');
         }
       } else {
-        res.status(403).json("You are not alowed to do that!");
+        res.status(403).json('You are not alowed to do that!');
       }
     });
   } catch {
-    return res.status(401).json("You are not alowed to do that!");
+    return res.status(401).json('You are not alowed to do that!');
   }
 };
 
@@ -164,14 +164,14 @@ const verifyTokeManager = (req, res, next) => {
         if (check) {
           next();
         } else {
-          res.status(403).json("You are not alowed to do that!");
+          res.status(403).json('You are not alowed to do that!');
         }
       } else {
-        res.status(403).json("You are not alowed to do that!");
+        res.status(403).json('You are not alowed to do that!');
       }
     });
   } catch {
-    return res.status(401).json("You are not alowed to do that!");
+    return res.status(401).json('You are not alowed to do that!');
   }
 };
 

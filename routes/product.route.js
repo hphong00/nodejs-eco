@@ -1,27 +1,30 @@
-const productCtrl = require("../controller/product.controller");
+const productCtrl = require('../controller/product.controller');
 const {
-    verifyToken,
-    verifyTokenAndAuthorization,
-    verifyTokenAndAdmin,
-} = require("../middleware/verifyToken");
+  verifyToken,
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+} = require('../middleware/verifyToken');
 
-const router = require("express").Router();
+const router = require('express').Router();
 
 //CREATE
-router.post("/", /*verifyTokenAndAdmin,*/ productCtrl.createProduct)
+router.post('/', /*verifyTokenAndAdmin,*/ productCtrl.createProduct);
 
 //UPDATE
-router.put("/:id", /*verifyTokenAndAdmin,*/ productCtrl.updateProduct)
+router.put('/:id', /*verifyTokenAndAdmin,*/ productCtrl.updateProduct);
 
 //DELETE
-router.delete("/:id",/* verifyTokenAndAdmin,*/ productCtrl.deleteProduct)
+router.delete('/:id', /* verifyTokenAndAdmin,*/ productCtrl.deleteProduct);
 
 //GET PRODUCT
-router.get("/find/:id", /*verifyTokenAndAdmin,*/ productCtrl.getProduct)
+router.get('/find/:id', /*verifyTokenAndAdmin,*/ productCtrl.getProduct);
 
 //GET ALL PRODUCTS
-router.get("/", /*verifyTokenAndAdmin,*/ productCtrl.getAllProducts)
+router.get('/', /*verifyTokenAndAdmin,*/ productCtrl.getAllProducts);
 
 //GET NUMBER PRODUCTS
-router.get("/get-number-product", /*verifyTokenAndAdmin,*/ productCtrl.getNumberProduct)
+router.get(
+  '/get-number-product',
+  /*verifyTokenAndAdmin,*/ productCtrl.getNumberProduct,
+);
 module.exports = router;

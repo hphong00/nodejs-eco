@@ -1,77 +1,80 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const ProductSchema = new mongoose.Schema({
+const ProductSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
+      type: String,
     },
     desc: {
-        type: String,
+      type: String,
     },
     img: {
-        type: String,
+      type: String,
     },
     price: {
-        type: String,
+      type: String,
     },
     numberofproducts: {
-        type: Number
+      type: Number,
     },
     categories: {
-        type: Array
+      type: Array,
     },
     imgProduct: {
-        type: String,
+      type: String,
     },
     khung: {
-        type: String,
+      type: String,
     },
     memory: {
-        type: Array
+      type: Array,
     },
     chip: {
-        type: String
+      type: String,
     },
     ram: {
-        type: String
+      type: String,
     },
     kichthuoc: {
-        type: String
+      type: String,
     },
     trongluong: {
-        type: String
+      type: String,
     },
     cauhinh: {
-        type: String
+      type: String,
     },
     color: {
-        type: Array
+      type: Array,
     },
     sale: {
-        type: String
+      type: String,
     },
     sale1: {
-        type: String
+      type: String,
     },
     pricefake: {
-        type: String
+      type: String,
     },
     pricesale: {
-        type: String,
+      type: String,
     },
     titletragop: {
-        type: String,
+      type: String,
     },
     imgIcon: {
-        type: String,
+      type: String,
     },
     imgIcon1: {
-        type: String,
+      type: String,
     },
     imgIcon2: {
-        type: String,
+      type: String,
     },
     imgIcon3: {
-        type: String,
+      type: String,
     },
-}, { timestamps: true });
-module.exports = mongoose.model("Product", ProductSchema);
+  },
+  { timestamps: true },
+);
+module.exports = mongoose.model('Product', ProductSchema);

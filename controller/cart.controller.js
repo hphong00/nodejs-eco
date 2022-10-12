@@ -1,12 +1,12 @@
-const Cart = require("../models/Cart");
-const User = require("../models/User");
-const Product = require("../models/Product");
-const ErrorResponse = require("../utils/error_response");
+const Cart = require('../models/Cart');
+const User = require('../models/User');
+const Product = require('../models/Product');
+const ErrorResponse = require('../utils/error_response');
 const {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
-} = require("../middleware/verifyToken");
+} = require('../middleware/verifyToken');
 
 const cartCtrl = {
   //CREATE
@@ -15,11 +15,11 @@ const cartCtrl = {
       const newCart = new Cart(req.body);
       const user = await User.findById(newCart.userId);
       if (!user) {
-        return res.status(401).json("Login false");
+        return res.status(401).json('Login false');
       }
       if (newCart) {
         var check = true;
-        newCart.products.forEach(async function (value) {
+        const newC = newCart.products.forEach(async function (value) {
           if (value.productId) {
             var product = await Product.findById(value.productId);
             if (
@@ -27,12 +27,19 @@ const cartCtrl = {
               product.numberofproducts < 1
             ) {
               check = false;
-              res.status(404).json(check);
+              res.status(404).json('false');
             }
           } else {
-            res.status(404).json("false");
+            res.status(404).json('false');
           }
         });
+        // newC.then(() => {
+        //    console.log("Success");
+        //    console.log("Random number: ");
+        // })
+        // .catch((err) => {
+        //    console.log("Error: ", err.message);
+        // })
       }
       // if (check) {
       //   newCart.products.forEach(async function (value) {
@@ -62,7 +69,7 @@ const cartCtrl = {
         {
           $set: req.body,
         },
-        { new: true }
+        { new: true },
       );
       res.status(200).json(updatedCart);
     } catch (err) {
@@ -74,7 +81,7 @@ const cartCtrl = {
   deleteCart: async (req, res) => {
     try {
       await Cart.findByIdAndDelete(req.params.id);
-      res.status(200).json("Cart has been deleted...");
+      res.status(200).json('Cart has been deleted...');
     } catch (err) {
       res.status(500).json(err);
     }
