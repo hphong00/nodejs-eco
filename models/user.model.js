@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
-
+const { roles } = require('../config/roles');
+const CryptoJS = require('crypto-js');
+const paginate = require('../utils/paginate');
+const toJSON = require('../utils/toJSON');
 // const roles = [
 //   "ROLE_ADMIN",
 //   "ROLE_JE",
@@ -82,15 +85,18 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-// function validateUser(user) {
-//   const schema = {
-//     username: Joi.string().min(3).max(50).required(),
-//     // email: Joi.string().min(5).max(255).required().email(),
-//     password: Joi.string().min(3).max(255).required()
-//   };
 
-//   return Joi.validate(user, schema);
-// }
+UserSchema.plugin(toJSON);
+UserSchema.plugin(paginate);
+UserSchema.pre('save', async function (next) {
+  const user = this;
+  if (user.isModified('password')) {
+    user.password = CryptoJS.AES.encrypt(
+      user.password,
+      process.env.PASS_SEC,
+    ).toString();
+  }
+  next();
+});
 
 module.exports = mongoose.model('User', UserSchema);
-// exports.validate = validateUser;

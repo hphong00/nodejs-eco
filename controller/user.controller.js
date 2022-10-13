@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/user.model');
 const sendEmail = require('../utils/sendEmail');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
@@ -8,6 +8,21 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require('../middleware/verifyToken');
+const pick = require('../utils/pick');
+
+/**
+ * Query for users
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @returns {Promise<QueryResult>}
+ */
+const queryUsers = async (filter, options) => {
+  const users = await User.paginate(filter, options);
+  return users;
+};
 
 const userCrtl = {
   //UPDATE
@@ -73,12 +88,36 @@ const userCrtl = {
 
   //GET ALL USER
   getAllUsers: async (req, res) => {
-    const query = req.query.new;
     try {
-      const users = query
-        ? await User.find().sort({ _id: -1 }).limit(5)
-        : await User.find();
-      res.status(200).json(users);
+      const paginates = req.body;
+      if (paginates.email && paginates.username) {
+        var filter = {
+          username: paginates.username,
+          email: paginates.email,
+        };
+      } else if (paginates.username) {
+        var filter = {
+          username: paginates.username,
+        };
+      } else if (paginates.email) {
+        var filter = {
+          email: paginates.email,
+        };
+      } else {
+        var filter = {};
+      }
+      const options = {
+        sortBy: paginates.sortBy,
+        limit: paginates.limit,
+        page: paginates.page,
+      };
+      const result = await queryUsers(filter, options);
+      res.status(200).json(result);
+
+      // const users = query
+      //   ? await User.find().sort({ _id: -1 }).limit(5)
+      //   : await User.find();
+      // res.status(200).json(users);
     } catch (err) {
       res.status(500).json(err);
     }

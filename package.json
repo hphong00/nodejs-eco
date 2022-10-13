@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "formatcode":"prettier --single-quote --trailing-comma all --write ./**/*.js",
+    "formatcode": "prettier --single-quote --trailing-comma all --write ./**/*.js",
     "start": "nodemon index.js"
   },
   "dependencies": {
@@ -32,6 +32,7 @@
     "stripe": "^8.174.0",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.5.0",
-    "validatorjs": "^3.22.1"
+    "validatorjs": "^3.22.1",
+    "winston": "^3.8.2"
   }
 }

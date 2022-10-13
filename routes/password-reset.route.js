@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/user.model');
 const sendEmail = require('../utils/sendEmail');
 const Joi = require('joi');
 const router = require('express').Router();

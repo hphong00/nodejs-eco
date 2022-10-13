@@ -13,6 +13,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db.config');
+// const logger = require('./config/logger');
 // const readDbScvv = require('./utils/export_collection_csv');
 // const readDbJs = require('./utils/export-file-js');
 dotenv.config();

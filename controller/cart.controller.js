@@ -1,6 +1,6 @@
-const Cart = require('../models/Cart');
-const User = require('../models/User');
-const Product = require('../models/Product');
+const Cart = require('../models/cart.model');
+const User = require('../models/user.model');
+const Product = require('../models/product.model');
 const ErrorResponse = require('../utils/error_response');
 const {
   verifyToken,

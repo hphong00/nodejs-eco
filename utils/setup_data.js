@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/user.model');
 const CryptoJS = require('crypto-js');
 
 const setUpData = async () => {
