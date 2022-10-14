@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
-const { roles } = require('../config/roles');
 const CryptoJS = require('crypto-js');
 const paginate = require('../utils/paginate');
 const toJSON = require('../utils/toJSON');

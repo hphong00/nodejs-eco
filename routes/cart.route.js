@@ -23,7 +23,7 @@ router.get(
   /*verifyTokenAndAuthorization,*/ cartCtrl.getUserCart,
 );
 
-// //GET ALL
+//GET ALL
 router.get('/', /*verifyTokenAndAdmin,*/ cartCtrl.getAllCart);
 
 module.exports = router;

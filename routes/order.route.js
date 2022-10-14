@@ -22,10 +22,10 @@ router.get(
   /* verifyTokenAndAuthorization,*/ orderCtrl.getUserOrders,
 );
 
-// //GET ALL
+//GET ALL
 router.get('/', /*verifyTokenAndAdmin,*/ orderCtrl.getAllOrder);
 
-// GET MONTHLY INCOME
+//GET MONTHLY INCOME
 router.get('/income', /* verifyTokenAndAdmin,*/ orderCtrl.getMonthlyIncome);
 
 module.exports = router;
