@@ -8,8 +8,6 @@ const {
   verifyTokeSuperAdmin,
 } = require('../middleware/verifyToken');
 const passport = require('passport');
-const passportConfig = require('../middleware/passport');
-
 const router = require('express').Router();
 
 //UPDATE
@@ -28,7 +26,11 @@ router.delete('/:id', /* verifyTokenAndAuthorization,*/ userCrtl.deleteUser);
 router.get('/find/:id', /* verifyTokenAndAdmin,*/ userCrtl.getUser);
 
 //GET ALL USER
-router.get('/', userCrtl.getAllUsers);
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  userCrtl.getAllUsers,
+);
 
 // router
 //   .route("/")

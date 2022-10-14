@@ -1,141 +1,138 @@
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
+const LocalStrategy = require('passport-local').Strategy;
+const GooglePlusTokenStrategy = require('passport-google-plus-token');
+const FacebookTokenStrategy = require('passport-facebook-token');
+
 const User = require('../models/user.model');
-// const LocalStrategy = require("passport-local").Strategy;
-// const GooglePlusTokenStrategy = require("passport-google-plus-token");
-// const FacebookTokenStrategy = require('passport-facebook-token');
-// Passport Jwt
-passport.use(
-  new JwtStrategy(
-    {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken('Token'),
-      secretOrKey: 'phonghuynh1',
-    },
-    async (payload, done) => {
-      try {
-        console.log('payload', payload);
-        const user = await User.findById(payload.id);
 
-        if (!user) return done(null, false);
+const jwtOptions = {
+  secretOrKey: 'phonghuynh1',
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken('Authorization'),
+};
 
-        done(null, user);
-      } catch (error) {
-        done(error, false);
-      }
-    },
-  ),
-);
+const jwtGoogleOptions = {
+  clientID: '626881250183-dj6nv976pbll5vbnmmad8iu5hopo8odr.apps.googleusercontent.com',
+  clientSecret: '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',
+};
 
-// const oAuth = (service) => async (token, done) => {
-//   try {
-//     const userData = await authProviders[service](token);
-//     const user = await User.oAuthLogin(userData);
-//     return done(null, user);
-//   } catch (err) {
-//     return done(err);
-//   }
-// };
+const jwtFacebookOptions = {
+  clientID: 'auth.facebook.CLIENT_ID',
+  clientSecret: 'auth.facebook.CLIENT_SECRET',
+};
+
+const jwtLocalOptions = {
+  usernameField: 'email',
+};
+
+// Passport api
+const jwtVerify = async (payload, done) => {
+  try {
+    const user = await User.findById(payload.id);
+    if (!user) return done(null, false);
+    done(null, user);
+  } catch (error) {
+    done(error, false);
+  }
+};
+
 // Passport Google
-// passport.use(
-//   new GooglePlusTokenStrategy(
-//     {
-//       clientID: auth.google.CLIENT_ID,
-//       clientSecret: auth.google.CLIENT_SECRET,
-//     },
-//     async (accessToken, refreshToken, profile, done) => {
-//       try {
-//         console.log("accessToken ", accessToken);
-//         console.log("refreshToken ", refreshToken);
-//         console.log("profile ", profile);
-//         // check whether this current user exists in our database
-//         const user = await User.findOne({
-//           authGoogleID: profile.id,
-//           authType: "google",
-//         });
+const jwtGoogleVerify = async (accessToken, refreshToken, profile, done) => {
+  try {
+    console.log('accessToken ', accessToken);
+    console.log('refreshToken ', refreshToken);
+    console.log('profile ', profile);
+    // check whether this current user exists in our database
+    const user = await User.findOne({
+      authGoogleID: profile.id,
+      authType: 'google',
+    });
 
-//         if (user) return done(null, user);
+    if (user) return done(null, user);
 
-//         // If new account
-//         const newUser = new User({
-//           authType: "google",
-//           authGoogleID: profile.id,
-//           email: profile.emails[0].value,
-//           firstName: profile.name.givenName,
-//           lastName: profile.name.familyName,
-//         });
+    // If new account
+    const newUser = new User({
+      authType: 'google',
+      authGoogleID: profile.id,
+      email: profile.emails[0].value,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
+    });
 
-//         await newUser.save();
+    await newUser.save();
 
-//         done(null, newUser);
-//       } catch (error) {
-//         console.log("error ", error);
-//         done(error, false);
-//       }
-//     }
-//   )
-// );
+    done(null, newUser);
+  } catch (error) {
+    console.log('error ', error);
+    done(error, false);
+  }
+};
 
-// // Passport Facebook
-// passport.use(
-//   new FacebookTokenStrategy(
-//     {
-//       clientID: auth.facebook.CLIENT_ID,
-//       clientSecret: auth.facebook.CLIENT_SECRET,
-//     },
-//     async (accessToken, refreshToken, profile, done) => {
-//       try {
-//         // check whether this current user exists in our database
-//         const user = await User.findOne({
-//           authFacebookID: profile.id,
-//           authType: "google",
-//         });
+// Passport Facebook
+const jwtFacebookVerify = async (accessToken, refreshToken, profile, done) => {
+  try {
+    console.log('accessToken ', accessToken);
+    console.log('refreshToken ', refreshToken);
+    console.log('profile ', profile);
 
-//         if (user) return done(null, user);
+    // check whether this current user exists in our database
+    const user = await User.findOne({
+      authFacebookID: profile.id,
+      authType: 'google',
+    });
 
-//         // If new account
-//         const newUser = new User({
-//           authType: "facebook",
-//           authFacebookID: profile.id,
-//           email: profile.emails[0].value,
-//           firstName: profile.name.givenName,
-//           lastName: profile.name.familyName,
-//         });
+    if (user) return done(null, user);
 
-//         await newUser.save();
+    // If new account
+    const newUser = new User({
+      authType: 'facebook',
+      authFacebookID: profile.id,
+      email: profile.emails[0].value,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
+    });
 
-//         done(null, newUser);
-//       } catch (error) {
-//         console.log("error ", error);
-//         done(error, false);
-//       }
-//     }
-//   )
-// );
+    await newUser.save();
 
-// // Passport local
-// passport.use(
-//   new LocalStrategy(
-//     {
-//       usernameField: "email",
-//     },
-//     async (email, password, done) => {
-//       try {
-//         const user = await User.findOne({ email });
+    done(null, newUser);
+  } catch (error) {
+    console.log('error ', error);
+    done(error, false);
+  }
+};
 
-//         if (!user) return done(null, false);
+// Passport local
+const jwtLocalVerify = async (email, password, done) => {
+  try {
+    const user = await User.findOne({ email });
 
-//         const isCorrectPassword = await user.isValidPassword(password);
+    if (!user) return done(null, false);
 
-//         if (!isCorrectPassword) return done(null, false);
+    const isCorrectPassword = await user.isValidPassword(password);
 
-//         done(null, user);
-//       } catch (error) {
-//         done(error, false);
-//       }
-//     }
-//   )
-// );
-// exports.jwt = new jwtStrategy(jwtOptions, jwt);
-// exports.facebook = new bearerStrategy(oAuth("facebook"));
-// exports.google = new bearerStrategy(oAuth("google"));
+    if (!isCorrectPassword) return done(null, false);
+
+    done(null, user);
+  } catch (error) {
+    done(error, false);
+  }
+};
+
+const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
+const jwtGoogleStrategy = new GooglePlusTokenStrategy(
+  jwtGoogleOptions,
+  jwtGoogleVerify,
+);
+const jwtFacebookStrategy = new FacebookTokenStrategy(
+  jwtFacebookOptions,
+  jwtFacebookVerify,
+);
+const jwtLocalStrategy = new LocalStrategy(jwtLocalOptions, jwtLocalVerify);
+
+module.exports = {
+  jwtStrategy,
+  jwtGoogleStrategy,
+  jwtFacebookStrategy,
+  jwtLocalStrategy,
+};

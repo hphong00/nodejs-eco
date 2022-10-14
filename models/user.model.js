@@ -49,6 +49,11 @@ const UserSchema = new mongoose.Schema(
       // enum: roles,
       default: 'ROLE_USER',
     },
+    authLogin: {
+      type: String,
+      default: 'Register',
+      //Google Facebook Local Register
+    },
     active: {
       type: Boolean,
       default: true,

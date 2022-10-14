@@ -15,6 +15,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
+    "express-mongo-sanitize": "^2.2.0",
     "express-validation": "^4.1.0",
     "husky": "^8.0.1",
     "joi": "^17.6.2",
@@ -26,13 +27,17 @@
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.15",
     "passport": "^0.6.0",
+    "passport-facebook-token": "^4.0.0",
+    "passport-google-plus-token": "^2.1.0",
     "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "prettier": "^2.7.1",
     "strip": "^3.0.0",
     "stripe": "^8.174.0",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.5.0",
     "validatorjs": "^3.22.1",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "xss-clean": "^0.1.1"
   }
 }

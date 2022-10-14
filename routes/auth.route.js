@@ -1,5 +1,6 @@
 const auth = require('../middleware/auth');
 const router = require('express').Router();
+const passport = require('passport');
 const validate = require('express-validation');
 const {
   login,
@@ -8,8 +9,6 @@ const {
   refresh,
   forgotPassword,
 } = require('../validations/auth.validation');
-const passport = require('passport');
-const passportConfig = require('../middleware/passport');
 
 const {
   schemas,
@@ -28,10 +27,8 @@ router
 
 router.post('/token', /* verifyToken,*/ auth.refreshToken);
 
-router.post('/google', /* verifyToken,*/ auth.google);
-// router.route("/logout").post(/* authorize(LOGGED_USER),*/ controller.logout);
-// router
-//   .route("/facebook")
-//   .post(/* validate(oAuth),*/ oAuthLogin("facebook"), controller.oAuth);
+router.route('/google').post(passport.authenticate('google-plus-token', { session: false }),  auth.google);
+
+router.route('/facebook').post(passport.authenticate('facebook-token', { session: false }),  auth.login);
 
 module.exports = router;
