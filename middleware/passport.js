@@ -4,7 +4,6 @@ const { ExtractJwt } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const GooglePlusTokenStrategy = require('passport-google-plus-token');
 const FacebookTokenStrategy = require('passport-facebook-token');
-
 const User = require('../models/user.model');
 
 const jwtOptions = {
@@ -13,7 +12,8 @@ const jwtOptions = {
 };
 
 const jwtGoogleOptions = {
-  clientID: '626881250183-dj6nv976pbll5vbnmmad8iu5hopo8odr.apps.googleusercontent.com',
+  clientID:
+    '626881250183-dj6nv976pbll5vbnmmad8iu5hopo8odr.apps.googleusercontent.com',
   clientSecret: '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',
 };
 
@@ -40,29 +40,31 @@ const jwtVerify = async (payload, done) => {
 // Passport Google
 const jwtGoogleVerify = async (accessToken, refreshToken, profile, done) => {
   try {
-    console.log('accessToken ', accessToken);
-    console.log('refreshToken ', refreshToken);
-    console.log('profile ', profile);
-    // check whether this current user exists in our database
+    // console.log("accessToken ", accessToken);
+    // console.log("refreshToken ", refreshToken);
+    // console.log("profile ", profile);
+
+    if (!accessToken) {
+      return done(null, false);
+    }
+    const username = profile.name.givenName + profile.name.familyName;
     const user = await User.findOne({
-      authGoogleID: profile.id,
-      authType: 'google',
-    });
-
-    if (user) return done(null, user);
-
-    // If new account
-    const newUser = new User({
-      authType: 'google',
-      authGoogleID: profile.id,
+      username: username,
       email: profile.emails[0].value,
-      firstName: profile.name.givenName,
-      lastName: profile.name.familyName,
     });
-
-    await newUser.save();
-
-    done(null, newUser);
+    if (user) {
+      return done(null, user);
+    } else {
+      const newUser = new User({
+        authLogin: 'Google',
+        email: profile.emails[0].value,
+        username: username,
+        password: username,
+      });
+      console.log(newUser);
+      await newUser.save();
+      done(null, newUser);
+    }
   } catch (error) {
     console.log('error ', error);
     done(error, false);

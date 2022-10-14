@@ -9,7 +9,11 @@ const orderRoute = require('./routes/order.route');
 const stripeRoute = require('./routes/stripe.route');
 const passwordReset = require('./routes/password-reset.route');
 const passport = require('passport');
-const { jwtStrategy,jwtGoogleStrategy,jwtFacebookStrategy } = require('./middleware/passport');
+const {
+  jwtStrategy,
+  jwtGoogleStrategy,
+  jwtFacebookStrategy,
+} = require('./middleware/passport');
 const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
 

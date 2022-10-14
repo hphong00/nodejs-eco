@@ -27,8 +27,18 @@ router
 
 router.post('/token', /* verifyToken,*/ auth.refreshToken);
 
-router.route('/google').post(passport.authenticate('google-plus-token', { session: false }),  auth.google);
+router
+  .route('/google')
+  .post(
+    passport.authenticate('google-plus-token', { session: false }),
+    auth.google,
+  );
 
-router.route('/facebook').post(passport.authenticate('facebook-token', { session: false }),  auth.login);
+router
+  .route('/facebook')
+  .post(
+    passport.authenticate('facebook-token', { session: false }),
+    auth.login,
+  );
 
 module.exports = router;
