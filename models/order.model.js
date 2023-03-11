@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -8,6 +8,10 @@ const OrderSchema = new mongoose.Schema(
     },
     products: [
       {
+        shopId: {
+          type: String,
+          // required: true,
+        },
         productId: {
           type: String,
           required: true,
@@ -17,13 +21,45 @@ const OrderSchema = new mongoose.Schema(
           default: 1,
           required: true,
         },
+        voucherShop: {
+          type: String,
+        },
+        note: {
+          type: String,
+        },
       },
     ],
-    amount: { type: Number },
+    paymentMethods: {
+      // phương thức thanh toán
+      type: Object,
+      // required: true,
+    },
+    shippingMethod: {
+      // phương thức vận chuyển
+      type: Object,
+      // required: true,
+    },
+    voucherApp: {
+      type: String,
+    },
+    voucherPayment: {
+      type: String,
+    },
+    refund: {
+      // số tiền hoàn
+      type: String,
+    },
+    accumulatedMoney: {
+      type: Number,
+    },
+    paymentStatus: { type: String },
     address: { type: Object },
-    status: { type: String, default: 'Chờ xác nhận' },
+    status: { type: String, default: "Chờ xác nhận" },
+    infoShipping: { type: Object }, // thông tin vận chuyển
+    totalProducts: { type: Number },
+    amount: { type: Number }, // tổng tiền
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model("Order", OrderSchema);

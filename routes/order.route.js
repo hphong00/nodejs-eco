@@ -1,31 +1,31 @@
-const orderCtrl = require('../controller/order.controller');
+const orderCtrl = require("../controller/order.controller");
 const {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
-} = require('../middleware/verifyToken');
+} = require("../middleware/verifyToken");
 
-const router = require('express').Router();
+const router = require("express").Router();
 
 //CREATE
-router.post('/', /* verifyToken,*/ orderCtrl.createOrder);
+router.post("/", /* verifyToken,*/ orderCtrl.createOrder);
 
 //UPDATE
-router.put('/:id', /* verifyTokenAndAdmin,*/ orderCtrl.updeteOrder);
+router.put("/:id", /* verifyTokenAndAdmin,*/ orderCtrl.updateOrder);
 
 //DELETE
-router.delete('/:id', /* verifyTokenAndAdmin,*/ orderCtrl.deleteOrder);
+router.delete("/:id", /* verifyTokenAndAdmin,*/ orderCtrl.deleteOrder);
 
 //GET USER ORDERS
 router.get(
-  '/find/:userId',
-  /* verifyTokenAndAuthorization,*/ orderCtrl.getUserOrders,
+  "/find/:userId",
+  /* verifyTokenAndAuthorization,*/ orderCtrl.getUserOrders
 );
 
 //GET ALL
-router.get('/', /*verifyTokenAndAdmin,*/ orderCtrl.getAllOrder);
+router.get("/", /*verifyTokenAndAdmin,*/ orderCtrl.getAllOrder);
 
 //GET MONTHLY INCOME
-router.get('/income', /* verifyTokenAndAdmin,*/ orderCtrl.getMonthlyIncome);
+router.get("/income", /* verifyTokenAndAdmin,*/ orderCtrl.getMonthlyIncome);
 
 module.exports = router;

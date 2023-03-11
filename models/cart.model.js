@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const CartSchema = new mongoose.Schema(
   {
@@ -8,6 +8,10 @@ const CartSchema = new mongoose.Schema(
     },
     products: [
       {
+        shopId: {
+          type: String,
+          // required: true,
+        },
         productId: {
           type: String,
         },
@@ -18,7 +22,7 @@ const CartSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-module.exports = mongoose.model('Cart', CartSchema);
+module.exports = mongoose.model("Cart", CartSchema);

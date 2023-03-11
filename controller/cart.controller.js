@@ -1,63 +1,60 @@
-const Cart = require('../models/cart.model');
-const User = require('../models/user.model');
-const Product = require('../models/product.model');
-const ErrorResponse = require('../utils/error_response');
+const Cart = require("../models/cart.model");
+const User = require("../models/user.model");
+const Product = require("../models/product.model");
+const ErrorResponse = require("../utils/error_response");
 const {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
-} = require('../middleware/verifyToken');
+} = require("../middleware/verifyToken");
 
 const cartCtrl = {
   //CREATE
   createCart: async (req, res) => {
     try {
+      if (req.body.products == null) {
+        return res.status(401).json("Giỏ hàng không có sản phẩm");
+      }
       const newCart = new Cart(req.body);
       const user = await User.findById(newCart.userId);
       if (!user) {
-        return res.status(401).json('Login false');
+        return res.status(401).json("Đăng nhập trước khi thêm vào giỏ hàng");
       }
       if (newCart) {
         var check = true;
-        const newC = newCart.products.forEach(async function (value) {
+        newCart.products.forEach(async function (value) {
           if (value.productId) {
             var product = await Product.findById(value.productId);
             if (
-              Number(value.quantity) > Number(product.numberofproducts) ||
-              product.numberofproducts < 1
+              product.numberOfProducts < value.quantity ||
+              product.numberOfProducts < 1
             ) {
               check = false;
-              res.status(404).json('false');
+              return res
+                .status(404)
+                .json("Số lượng " + product.title + " không đủ");
             }
           } else {
-            res.status(404).json('false');
+            return res.status(404).json("Sản phẩm đã ngừng kinh doanh");
           }
         });
-        // newC.then(() => {
-        //    console.log("Success");
-        //    console.log("Random number: ");
-        // })
-        // .catch((err) => {
-        //    console.log("Error: ", err.message);
-        // })
       }
       // if (check) {
       //   newCart.products.forEach(async function (value) {
       //     if (value.productId) {
       //       var product = await Product.findById(value.productId);
-      //       product.numberofproducts =
-      //         product.numberofproducts - value.quantity;
+      //       product.numberOfProducts =
+      //         product.numberOfProducts - value.quantity;
       //       await product.save();
-      //       res.status(200).json("ok");
       //     }
       //   });
-      //   await newCart.save();
-      //   res.status(200).json(check);
       // } else {
-      //   res.status(404).json("false");
+      //   return res.status(404).json("Đã có lỗi mời bạn mua lại");
       // }
+      await newCart.save();
+      return res.status(200).json("Thêm vào giỏ hàng thành công");
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
 
@@ -69,7 +66,7 @@ const cartCtrl = {
         {
           $set: req.body,
         },
-        { new: true },
+        { new: true }
       );
       res.status(200).json(updatedCart);
     } catch (err) {
@@ -81,7 +78,7 @@ const cartCtrl = {
   deleteCart: async (req, res) => {
     try {
       await Cart.findByIdAndDelete(req.params.id);
-      res.status(200).json('Cart has been deleted...');
+      res.status(200).json("Cart has been deleted...");
     } catch (err) {
       res.status(500).json(err);
     }

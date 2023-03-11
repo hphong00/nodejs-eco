@@ -24,7 +24,7 @@ const queryUsers = async (filter, options) => {
   return users;
 };
 
-const userCrtl = {
+const userCtrl = {
   //UPDATE
   updateUser: async (req, res) => {
     if (req.body.password) {
@@ -51,14 +51,14 @@ const userCrtl = {
   // UPDATE PROFILE
   updateProfile: async (req, res) => {
     try {
-      const updateprofile = await User.findByIdAndUpdate(
+      const updateProfile = await User.findByIdAndUpdate(
         req.params.id,
         {
           $set: { profile: req.body },
         },
         { new: true },
       );
-      res.status(200).json(updateprofile);
+      res.status(200).json(updateProfile);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -70,8 +70,7 @@ const userCrtl = {
       await User.findByIdAndDelete(req.params.id);
       res.status(200).json('xóa thành công');
     } catch (err) {
-      res.st;
-      atus(500).json(err);
+      res.status(500).json(err);
     }
   },
 
@@ -202,13 +201,13 @@ const userCrtl = {
 
       res.send('password reset link sent to your email account');
     } catch (error) {
-      res.send('An error occured');
+      res.send('An error occurred');
       console.log(error);
     }
   },
 
   // change password(forgot password)
-  changePasswordfg: async (req, res) => {
+  forgotPassword: async (req, res) => {
     try {
       const schema = Joi.object({ password: Joi.string().required() });
       const { error } = schema.validate(req.body);
@@ -232,9 +231,10 @@ const userCrtl = {
       await user.save();
       res.send('password reset sucessfully.');
     } catch (error) {
-      res.send('An error occured');
+      res.send('An error occurred');
       console.log(error);
     }
   },
 };
-module.exports = userCrtl;
+
+module.exports = userCtrl;
